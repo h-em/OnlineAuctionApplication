@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/auction-backend/auction.iml" filepath="$PROJECT_DIR$/auction-backend/auction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/auction-frontend/auction-frontend.iml" filepath="$PROJECT_DIR$/auction-frontend/auction-frontend.iml" />
     </modules>
   </component>
 </project>
