@@ -15,13 +15,15 @@ import javax.validation.constraints.Size;
 @Data
 @EqualsAndHashCode
 public class UserDto {
+
+    private int id;
     @NotEmpty
     @Pattern(regexp = "[A-Za-z]+",message = "Letters only!")
     private String firstName;
     @NotEmpty
     @Pattern(regexp = "[A-Za-z]+", message = "Letters only!")
     private String lastName;
-    @Email(message = "error.user.email.pattern")
+    @Email(message = "{error.user.email.pattern}")
     private String email;
     @NotEmpty
     @Pattern(regexp = "((.*)[A-Z]+(.*))", message = "Password should contain least one capital letter!")

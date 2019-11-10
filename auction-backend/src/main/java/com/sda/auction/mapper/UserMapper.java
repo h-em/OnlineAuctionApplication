@@ -1,13 +1,13 @@
-package com.sda.auction.mappert;
+package com.sda.auction.mapper;
 
 import com.sda.auction.dto.UserDto;
 import com.sda.auction.model.User;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Halip on 09.11.2019.
  */
-@Component
+@Service
 public class UserMapper {
 
     public User convert(UserDto userDto){
@@ -21,6 +21,7 @@ public class UserMapper {
 
     public UserDto convert(User user){
         UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
