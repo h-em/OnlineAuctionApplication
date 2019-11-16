@@ -24,6 +24,7 @@ public class ApplicationConfig {
         return messageSource;
     }
 
+    //FOR ERROR MESSAGES
     @Bean
     public LocalValidatorFactoryBean validator(MessageSource messageSource) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();

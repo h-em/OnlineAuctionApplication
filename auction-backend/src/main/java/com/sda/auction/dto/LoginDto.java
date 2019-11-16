@@ -14,15 +14,9 @@ import javax.validation.constraints.Size;
 
 @Data
 @EqualsAndHashCode
-public class UserDto {
+public class LoginDto {
 
-    private int id;
-    @NotEmpty
-    @Pattern(regexp = "[A-Za-z]+",message = "Letters only!")
-    private String firstName;
-    @NotEmpty
-    @Pattern(regexp = "[A-Za-z]+", message = "Letters only!")
-    private String lastName;
+    private String jwt;
     @NotEmpty
     @Email(message = "{error.user.email.pattern}")
     private String email;
@@ -30,7 +24,5 @@ public class UserDto {
     @Pattern(regexp = "((.*)[A-Z]+(.*))", message = "Password should contain least one capital letter!")
     @Size(min = 6, message = "Password should be at least 6 characters long!")
     private String password;
-    @NotEmpty
-    private String confirmPassword;
 
 }

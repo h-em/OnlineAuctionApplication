@@ -1,15 +1,14 @@
 package com.sda.auction.controller;
 
 import com.sda.auction.dto.UserDto;
-import com.sda.auction.model.User;
 import com.sda.auction.service.UserService;
+import com.sda.auction.validator.UserDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.util.List;
 
 /**
@@ -19,8 +18,23 @@ import java.util.List;
 @RequestMapping("/api/register")
 public class RegistrationController {
 
+
+    private UserService userService;
+    private UserDtoValidator userDtoValidator;
+
     @Autowired
-    UserService userService;
+    public RegistrationController( UserService userService, UserDtoValidator userDtoValidator){
+        this.userService = userService;
+        this.userDtoValidator =  userDtoValidator;
+    }
+/*
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> login(@Valid @RequestParam(value = "email") String email,
+                                        @RequestParam(value="password") String password){
+        userDtoValidator.validate(email, password);
+        return new ResponseEntity<>("login suCceSs!",HttpStatus.OK);
+    }
+*/
 
     @GetMapping
     @ResponseBody
@@ -31,18 +45,11 @@ public class RegistrationController {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDto> post(@Valid @RequestBody UserDto userDto) {
-
-        if(emailAlreadyRegistered(userDto.getEmail())){
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-        //UserDto finalUserDto = userService.addUser(userDto);
-        return new ResponseEntity<>(userService.addUser(userDto), HttpStatus.OK);
+        userDtoValidator.validate(userDto);
+        UserDto finalUserDto = userService.addUser(userDto);
+        return new ResponseEntity<>(finalUserDto, HttpStatus.OK);
     }
 
-    private boolean emailAlreadyRegistered(String email) {
-        User user = userService.findByEmail(email);
-        return user != null;
-    }
 /*
     @PutMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDto> put(@Valid @RequestBody UserDto userDto){
