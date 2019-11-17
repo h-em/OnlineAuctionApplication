@@ -7,12 +7,19 @@ import com.sda.auction.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by Halip on 16.11.2019.
  */
 @Service
 public class SecurityServiceImpl implements SecurityService {
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -22,7 +29,9 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public boolean passwordMatch(LoginDto loginDto, User user) {
         //imi compara singur parola in plane text de pe front cu parola hasuita din db
-        return passwordEncoder.matches(loginDto.getPassword(),user.getPassword());
+        String plainTextPassword = loginDto.getPassword();
+        String hashedPassword = user.getPassword();
+        return passwordEncoder.matches(plainTextPassword, hashedPassword);
     }
 
     @Override
@@ -34,5 +43,21 @@ public class SecurityServiceImpl implements SecurityService {
         String jwt = tokenProvider.createJwt(user);
         result.setJwt(jwt);
         return result;
+    }
+
+    @Override
+    public boolean isValid(ServletRequest servletRequest) {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        String requestURL = httpServletRequest.getRequestURI();
+        String jwt = resolveToken(httpServletRequest);
+        return tokenProvider.validate(jwt,requestURL);
+    }
+
+    private String resolveToken(HttpServletRequest httpServletRequest) {
+        String bearerToken = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(("Bearer "))){
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }

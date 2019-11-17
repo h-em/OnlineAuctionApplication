@@ -1,0 +1,13 @@
+
+
+ form#register_form p.error,
+ form#login_form p.error {
+    color: red;
+    text-align: left;
+    padding-left: 12px;
+    font-size: 14px;
+  }
+form#register_form p.success,
+form#login_form p.success {
+  color: green;
+}

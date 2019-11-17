@@ -3,31 +3,18 @@ const errorLineEnd = "</p>";
 const successLineStart = "<p class='success'>";
 const successLineEnd = "</p>";
 
-$(document).ready(function(){
-  
-  register();
-  /*
-  $("#firstName").focusout(function(){
-    validateUserName();
-  });
-*/
-
-});
 
 function register(){
-  $("form#register_form .error").remove();
 
-  $("form#register_form button").click(function(){
-    
+    $("form#register_form .error").remove();
+
     const firstName = $("form#register_form input#firstName").val();
     const lastName = $("form#register_form input#lastName").val();
     const email = $("form#register_form input#email").val();
     const password = $("form#register_form input#password").val();
     const confirmPassword = $("form#register_form input#confirmPassword").val();
 
-    const userDto = JSON.stringify({"firstName":firstName,"lastName":lastName,
-                                    "email": email,"password":password,
-                                    "confirmPassword":confirmPassword });
+    const userDto = JSON.stringify({firstName,lastName,email,password,confirmPassword });
 
     console.log(userDto);
 
@@ -37,7 +24,6 @@ function register(){
       type: 'post',
       contentType: 'application/json',
       data: userDto,
-      //     processData: false,
       success: function (data, textStatus, jQxhr) {
 
         console.log('success: ' + JSON.stringify(data));
@@ -65,19 +51,27 @@ function register(){
 
       }
     });
-
-  });
 }
 
 
-
-
-function validateUserName(){
-  var firstName = $(this).val();
+function validateUserName(element){
+  var firstName = $(element).val();
     if(firstName.length < 6){
-      if($(element).next().hasClass()){
+      if(!$(element).next().hasClass("error")){
         const errorLine = errorLineStart +" First name is not valid!" + errorLineEnd;
         $(errorLine).insertAfter(element);
     }
   } 
 };
+
+
+$(document).ready(function(){
+
+  $("form#register_form button").click( function(){
+     register();
+   }); 
+   
+   $("#firstName").focusout(function(){
+     validateUserName(this);
+   });
+ });

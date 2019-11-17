@@ -24,8 +24,8 @@ public class LoginController {
 
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<LoginDto> post(@Valid @RequestBody LoginDto userDto) {
-        LoginDto loginDtoResult = userService.login(userDto);
+    public ResponseEntity<LoginDto> post(@Valid @RequestBody LoginDto loginDto) {
+        LoginDto loginDtoResult = userService.login(loginDto);
         return new ResponseEntity<>(loginDtoResult, HttpStatus.OK);
     }
 

@@ -1,36 +1,30 @@
-$(document).ready(function () {
-/*
-  var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-  var theUrl = "http://localhost:8080/api/register";
-  xmlhttp.open("get", theUrl);
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.send(JSON.stringify({ "email": "inosdf@yaho.com",
-   "password":"$10$Xr7TdOAyrUPSaHJliuwFHeq0q/.dXtBGxUPpeUsX/pNkzHUe4893m"}));
-*/
+const errorLineStart = "<p class='error'>";
+const errorLineEnd = "</p>";
+const successLineStart = "<p class='success'>";
+const successLineEnd = "</p>";
 
-  // $.get("http://localhost:8080/api/test", JSON.stringify({ email: "b@g.c" }),
-  //     function (data, status) {
-  //       alert("Data: " + data + "\nStatus: " + status);
-  //     });
 
-  $("form#contactForm .error").remove();
+function login(){
+    $("form#login_form .error").remove();
+    const email = $("form#login_form input#email").val();
+    const password = $("form#login_form input#password").val();
 
-  $("form#contactForm button").click(function(){
+    const loginDto = JSON.stringify({ email,password});
 
-    const email = $("form#contactForm input#email").val();
-    const password = $("form#contactForm input#password").val();
-    const obj = JSON.stringify({"email": email,"password":password});
+    console.log(loginDto);
 
     $.ajax({
-      url: 'http://localhost:8080/api/register',
+      url: 'http://localhost:8080/api/login',
       dataType: 'json',
       type: 'post',
       contentType: 'application/json',
-      data: obj,
-      //     processData: false,
+      data: loginDto,
       success: function (data, textStatus, jQxhr) {
 
-        console.log('success: ' + JSON.stringify(data));
+        
+
+        localStorage.jwt = data.jwt;
+        console.log('success: ' + localStorage.jwt);
 
       },
       error: function (jqXhr, textStatus, errorThrown) {
@@ -49,11 +43,23 @@ $(document).ready(function () {
         } else {
           const errorMessage = jqXhr.responseJSON.message;
           console.log("singura eroare: " + errorMessage);
-        }
 
+          const errorLine = errorLineStart + errorMessage + errorLineEnd;
+          console.log(errorMessage);
+          var element = $("form#login_form .loginError");
+          if($(element).children().length == 0){
+            $(element).append(errorLine);
+          }
+
+        }
       }
     });
-  });
+}
 
+
+$(document).ready(function(){
+  $("form#login_form button").click( function(){
+    login();
+  });
 });
 

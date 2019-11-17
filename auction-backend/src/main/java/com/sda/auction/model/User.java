@@ -5,7 +5,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,5 +39,13 @@ public class User {
 
     public void addRole(Role role) {
         roles.add(role);
+    }
+
+    public List<String> getRolesAsString() {
+        List<String> result = new ArrayList<>();
+        for(Role role: roles){
+            result.add(role.getRoleName());
+        }
+        return result;
     }
 }
