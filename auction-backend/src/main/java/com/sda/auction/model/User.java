@@ -1,8 +1,6 @@
 package com.sda.auction.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,6 +34,17 @@ public class User {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "owner",
+            cascade = CascadeType.ALL)
+    private Set<Item> items = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private Set<Bid> bids = new HashSet<>();
+
 
     public void addRole(Role role) {
         roles.add(role);
